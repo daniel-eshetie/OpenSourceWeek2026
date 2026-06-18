@@ -1,8 +1,10 @@
-# OpenSourceWeek2026
+# UN System Data Commons — Getting Started
 
-# UN System Data Commons | Getting Started
+> Hackathon resources for accessing the UN System Data Commons REST API and MCP endpoints.
+>
+> This repository contains this guide plus a ready-to-use Postman collection and environment (in [`docs/`](docs/)). See [API interactions with Postman](#api-interactions-with-postman) below.
 
-# Hackathon environments
+## Hackathon environments
 
 #### Custom DC
 
@@ -12,7 +14,7 @@
 
 [https://dc-un-dev-dc-datacommons-service-72utkhfqvq-uc.a.run.app/](https://dc-un-dev-dc-datacommons-service-72utkhfqvq-uc.a.run.app/)
 
-# Connecting to MCP endpoints
+## Connecting to MCP endpoints
 
 For more detailed information, follow the instructions available on [datacommons.org](http://datacommons.org), starting with [Configure the MCP server \- Docs \- Data Commons](https://docs.datacommons.org/custom_dc/mcp.html).
 
@@ -87,7 +89,7 @@ Listing the tools can provide initial gateway to the types of queries to interfa
 ```
 $ /mcp list
 
-$ What variables are available from undta for describing climate change?
+$ What variables are available from undata for describing climate change?
 
 ...
 Data Commons provides a wide range of variables for describing climate change, which are primarily organized under
@@ -110,53 +112,53 @@ Data Commons provides a wide range of variables for describing climate change, w
 ...
 ```
 
-# API Interactions with Postman
+## API Interactions with Postman
 
-While it's possible to use curl to issue all of your API requests for development and testing, [Postman](https://www.getpostman.com/) is available to make API exploration easier.
+While it's possible to use curl to issue all of your API requests for development and testing, [Postman](https://www.getpostman.com/) makes API exploration easier.
 
-The attached files comprise a postman collection of API endpoints and the relevant environment variables. The work with both Custom Data Commons and [datacommons.org](http://datacommons.org) by changing the `base_url` in the environment variables.
+This repository includes a Postman collection of API endpoints plus the relevant environment variables. They work with both Custom Data Commons and [datacommons.org](http://datacommons.org) by changing the `base_url` in the environment.
 
 ### Files
 
-* \`datacommons\_rest\_apis.postman\_collection.json\`: Postman collection.  
-* \`datacommons\_rest\_apis.postman\_environment.json\`: Postman environment with configurable \`base\_url\` and \`api\_key\`.
+Both files live in the [`docs/`](docs/) folder:
+
+* [`datacommons_rest_apis.postman_collection.json`](docs/datacommons_rest_apis.postman_collection.json) — the Postman collection.
+* [`datacommons_rest_apis.postman_environment.json`](docs/datacommons_rest_apis.postman_environment.json) — the Postman environment, with configurable `base_url` and `api_key`.
 
 ### Referenced APIs
 
-The collection currently includes REST V2 sample requests for:
+The collection includes REST V2 sample requests for:
 
-* \`/v2/node\`: fetch node property labels and linked values.  
-* \`/v2/observation\`: fetch statistical observations, available variables, facets, and filtered observations.  
-* \`/v2/resolve\`: find DCIDs before using Node or Observation.
+* `/v2/node` — fetch node property labels and linked values.
+* `/v2/observation` — fetch statistical observations, available variables, facets, and filtered observations.
+* `/v2/resolve` — find DCIDs before using Node or Observation.
 
-The requests use POST bodies from the REST V2 examples so relation expressions do not need to be URL-encoded by hand.
+The requests use POST bodies from the REST V2 examples, so relation expressions do not need to be URL-encoded by hand.
 
 ### How to configure
 
-Import both JSON files into Postman, select the \`Data Commons REST APIs Environment\`, then update the values as needed for:
+Import both JSON files into Postman, select the `Data Commons REST APIs Environment`, then set:
 
-* \`base\_url\`: API base URL without a trailing slash and without the API version.  
-  * Custom DC pattern: \`https://\<CUSTOM\_HOST\>/core/api\` (e.g. https://dc-un-dev-dc-datacommons-service-72utkhfqvq-uc.a.run.app/core/api)  
-  * datacommons.org pattern: \`[https://api.datacommons.org](https://api.datacommons.org)\`  
-* \`api\_key\`: Leave blank for Custom Data Commons. Set only when calling datacommons.org.
+* `base_url` — API base URL without a trailing slash and without the API version.
+  * Custom DC pattern: `https://<CUSTOM_HOST>/core/api` (e.g. `https://dc-un-dev-dc-datacommons-service-72utkhfqvq-uc.a.run.app/core/api`)
+  * datacommons.org pattern: `https://api.datacommons.org`
+* `api_key` — leave blank for Custom Data Commons. Set only when calling datacommons.org.
 
-The collection adds the \`X-API-Key\` header only when \`api\_key\` is non-empty.
+The collection adds the `X-API-Key` header only when `api_key` is non-empty. Keeping `base_url` at `/core/api` (instead of `/core/api/v2`) leaves room to add other API families later.
 
-Keeping \`base\_url\` at \`/core/api\` instead of \`/core/api/v2\` leaves room to add other API families later.
+### Loading in Postman
 
-#### Loading in Postman
+1. Open Postman and choose the workspace you want to use. You do not need to create an account or log in to use the "thin" local client.
+2. Click `Import` in the sidebar.
+3. Select both JSON files from the [`docs/`](docs/) folder.
+4. Click `Import`.
+5. Select the `Data Commons REST APIs Environment`.
+6. Set `base_url` to the Data Commons endpoint, for example:
 
-1. Open Postman and choose the workspace you want to use. Note that you do not need to create an account or to log into Postman in order to use the ‘thin’ local client.  
-2. Click \`Import\` in the sidebar.  
-3. Select both JSON files from this folder.  
-4. Click \`Import\`.  
-5. Select the \`Data Commons REST APIs Environment\`.  
-6. Set \`base\_url\` to the Data Commons endpoint, for example:
+   ```text
+   https://<CUSTOM_HOST>/core/api
+   ```
 
-   \`\`\`text  
-   https://\<CUSTOM\_HOST\>/core/api  
-   \`\`\`
-
-7. Keep \`api\_key\` blank for Custom Data Commons.  
-8. Open the collection and run the v2 Node / Observation / Resolve requests.
+7. Keep `api_key` blank for Custom Data Commons.
+8. Open the collection and run the V2 Node / Observation / Resolve requests.
 

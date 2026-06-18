@@ -1,0 +1,571 @@
+{
+  "info": {
+    "_postman_id": "9b0d7c91-2a15-4bbf-a8a6-c1cf53d6d2a1",
+    "name": "Data Commons REST APIs",
+    "description": "Postman collection for Data Commons REST APIs. The current requests cover REST V2 /node, /observation, and /resolve examples. The base_url variable intentionally ends at /core/api so future API families can be added without changing the environment shape.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "const apiKey = pm.variables.get('api_key');",
+          "pm.request.headers.remove('X-API-Key');",
+          "if (apiKey && apiKey.trim()) {",
+          "  pm.request.headers.add({ key: 'X-API-Key', value: apiKey.trim() });",
+          "}"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "V2 Node",
+      "description": "REST V2 /node API examples. These requests fetch property labels and linked node values.",
+      "item": [
+        {
+          "name": "Get all incoming property labels for California",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"geoId/06\"\n  ],\n  \"property\": \"<-\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/node",
+            "description": "Get all incoming property labels of California without fetching values."
+          },
+          "response": []
+        },
+        {
+          "name": "Get a name property value",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"dc/03lw9rhpendw5\"\n  ],\n  \"property\": \"->name\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/node",
+            "description": "Get the outgoing name property for a single node."
+          },
+          "response": []
+        },
+        {
+          "name": "Get all US state DCIDs",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"country/USA\"\n  ],\n  \"property\": \"<-containedInPlace+{typeOf:State}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/node",
+            "description": "Use a relation expression and type filter to fetch states contained in the United States."
+          },
+          "response": []
+        },
+        {
+          "name": "Get multiple properties for multiple counties",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"geoId/06085\",\n    \"geoId/06087\"\n  ],\n  \"property\": \"->[name, latitude, longitude]\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/node",
+            "description": "Fetch name, latitude, and longitude for Santa Clara County and Santa Cruz County."
+          },
+          "response": []
+        },
+        {
+          "name": "Get all incoming property values for PowerPlant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"PowerPlant\"\n  ],\n  \"property\": \"<-*\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/node",
+            "description": "Fetch all incoming property values for PowerPlant. This response may include a nextToken for pagination."
+          },
+          "response": []
+        },
+        {
+          "name": "Get a list of statistical variables",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"StatisticalVariable\"\n  ],\n  \"property\": \"<-typeOf\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/node",
+            "description": "Fetch nodes that are typeOf StatisticalVariable. This response may include a nextToken for pagination."
+          },
+          "response": []
+        },
+        {
+          "name": "Get a list of entity types",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"Class\"\n  ],\n  \"property\": \"<-typeOf\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/node",
+            "description": "Fetch nodes that are typeOf Class. This response may include a nextToken for pagination."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "V2 Observation",
+      "description": "REST V2 /observation API examples. These requests fetch statistical observations, available variables, facets, and filtered results.",
+      "item": [
+        {
+          "name": "List variables available for Togo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"LATEST\",\n  \"entity\": {\n    \"dcids\": [\n      \"country/TGO\"\n    ]\n  },\n  \"select\": [\n    \"entity\",\n    \"variable\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/observation",
+            "description": "List variables that have latest observations for Togo. This omits observation values."
+          },
+          "response": []
+        },
+        {
+          "name": "Check if places have data for variables",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"LATEST\",\n  \"variable\": {\n    \"dcids\": [\n      \"Count_Person_Male\",\n      \"Count_Person_Female\"\n    ]\n  },\n  \"entity\": {\n    \"dcids\": [\n      \"country/CAN\",\n      \"country/MEX\",\n      \"country/MYS\",\n      \"country/SGP\"\n    ]\n  },\n  \"select\": [\n    \"entity\",\n    \"variable\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/observation",
+            "description": "Check whether selected countries have data for male and female population variables, without returning observation values."
+          },
+          "response": []
+        },
+        {
+          "name": "Check data availability and facets",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"LATEST\",\n  \"variable\": {\n    \"dcids\": [\n      \"Count_Person_Male\",\n      \"Count_Person_Female\"\n    ]\n  },\n  \"entity\": {\n    \"dcids\": [\n      \"country/CAN\",\n      \"country/MEX\",\n      \"country/MYS\",\n      \"country/SGP\"\n    ]\n  },\n  \"select\": [\n    \"entity\",\n    \"variable\",\n    \"facet\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/observation",
+            "description": "Return available facets for selected countries and variables, without returning observation values."
+          },
+          "response": []
+        },
+        {
+          "name": "Get latest population observation for Canada",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"LATEST\",\n  \"variable\": {\n    \"dcids\": [\n      \"Count_Person\"\n    ]\n  },\n  \"entity\": {\n    \"dcids\": [\n      \"country/CAN\"\n    ]\n  },\n  \"select\": [\n    \"entity\",\n    \"variable\",\n    \"value\",\n    \"date\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/observation",
+            "description": "Fetch latest population observations for Canada."
+          },
+          "response": []
+        },
+        {
+          "name": "Get 2015 household income for USA and California",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2015\",\n  \"variable\": {\n    \"dcids\": [\n      \"Median_Income_Household\"\n    ]\n  },\n  \"entity\": {\n    \"dcids\": [\n      \"country/USA\",\n      \"geoId/06\"\n    ]\n  },\n  \"select\": [\n    \"entity\",\n    \"variable\",\n    \"value\",\n    \"date\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/observation",
+            "description": "Fetch 2015 median household income observations for the USA and California."
+          },
+          "response": []
+        },
+        {
+          "name": "Get all observations for selected states",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"\",\n  \"entity\": {\n    \"dcids\": [\n      \"geoId/27\",\n      \"geoId/55\"\n    ]\n  },\n  \"variable\": {\n    \"dcids\": [\n      \"Count_Person_EducationalAttainmentDoctorateDegree\"\n    ]\n  },\n  \"select\": [\n    \"entity\",\n    \"variable\",\n    \"value\",\n    \"date\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/observation",
+            "description": "Use an empty date string to fetch all available observations for Minnesota and Wisconsin."
+          },
+          "response": []
+        },
+        {
+          "name": "Get latest observations for counties by expression",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"LATEST\",\n  \"variable\": {\n    \"dcids\": [\n      \"Count_Person\"\n    ]\n  },\n  \"entity\": {\n    \"expression\": \"geoId/06<-containedInPlace+{typeOf:County}\"\n  },\n  \"select\": [\n    \"entity\",\n    \"variable\",\n    \"value\",\n    \"date\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/observation",
+            "description": "Use an entity expression to fetch latest population observations for counties in California."
+          },
+          "response": []
+        },
+        {
+          "name": "Filter latest population by provenance domain",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"LATEST\",\n  \"variable\": {\n    \"dcids\": [\n      \"Count_Person\"\n    ]\n  },\n  \"entity\": {\n    \"dcids\": [\n      \"country/USA\"\n    ]\n  },\n  \"select\": [\n    \"entity\",\n    \"variable\",\n    \"value\",\n    \"date\"\n  ],\n  \"filter\": {\n    \"domains\": [\n      \"www2.census.gov\"\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/observation",
+            "description": "Filter latest USA population observations to a Census provenance domain."
+          },
+          "response": []
+        },
+        {
+          "name": "Filter latest population by facet ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"LATEST\",\n  \"variable\": {\n    \"dcids\": [\n      \"Count_Person\"\n    ]\n  },\n  \"entity\": {\n    \"dcids\": [\n      \"country/BRA\"\n    ]\n  },\n  \"select\": [\n    \"entity\",\n    \"variable\",\n    \"value\",\n    \"date\"\n  ],\n  \"filter\": {\n    \"facet_ids\": [\n      \"3981252704\"\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/observation",
+            "description": "Filter latest Brazil population observations to a specific facet ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "V2 Resolve",
+      "description": "REST V2 /resolve API examples. These requests help find DCIDs before querying Node or Observation.",
+      "item": [
+        {
+          "name": "Resolve a place by Wikidata ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"Q30\"\n  ],\n  \"property\": \"<-wikidataId->dcid\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/resolve",
+            "description": "Resolve Wikidata ID Q30 to a Data Commons DCID."
+          },
+          "response": []
+        },
+        {
+          "name": "Resolve a place by coordinates",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"37.42#-122.08\"\n  ],\n  \"property\": \"<-geoCoordinate->dcid\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/resolve",
+            "description": "Resolve a latitude and longitude coordinate to matching place DCIDs."
+          },
+          "response": []
+        },
+        {
+          "name": "Resolve a place by name",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"Georgia\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/resolve",
+            "description": "Resolve an ambiguous place name using the default description resolver."
+          },
+          "response": []
+        },
+        {
+          "name": "Resolve a place by name with a type filter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"Georgia\"\n  ],\n  \"property\": \"<-description{typeOf:State}->dcid\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/resolve",
+            "description": "Resolve Georgia with a State type filter."
+          },
+          "response": []
+        },
+        {
+          "name": "Resolve multiple city names with a type filter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"Mountain View, CA\",\n    \"New York City\"\n  ],\n  \"property\": \"<-description{typeOf:City}->dcid\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/resolve",
+            "description": "Resolve multiple city names to Data Commons DCIDs."
+          },
+          "response": []
+        },
+        {
+          "name": "Resolve a statistical variable",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nodes\": [\n    \"population\"\n  ],\n  \"resolver\": \"indicator\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": "{{base_url}}/v2/resolve",
+            "description": "Resolve an indicator search term to matching statistical variables."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
